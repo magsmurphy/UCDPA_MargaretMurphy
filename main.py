@@ -93,6 +93,13 @@ contracts = pd.concat([year1, year2, year3, year4, year5, year6, year7, year8, y
 # Remove zero values
 contracts= contracts[contracts['amount'] != 0]
 
-
+# Change payment date to datetime
+contracts['payment date'] = pd.to_datetime(contracts['payment date'])
+# Sort by payment date
+consorted = contracts.sort_values(by=['payment date'])
+consorted.set_index('payment date', inplace=True)
+To = '2031-12-31'
+From = '2021-10-01'
+consort = consorted.loc[From:To,:]
 
 
