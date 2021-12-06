@@ -41,6 +41,11 @@ outer_join['Year 2 values'] = outer_join['Year 2'] * outer_join['num_seats']
 outer_join['Year 3 values'] = outer_join['Year 3'] * outer_join['num_seats']
 outer_join['Year 4 values'] = outer_join['Year 4'] * outer_join['num_seats']
 outer_join['Year 5 values'] = outer_join['Year 5'] * outer_join['num_seats']
+outer_join['Year 6 values'] = outer_join['Year 6'] * outer_join['num_seats']
+outer_join['Year 7 values'] = outer_join['Year 7'] * outer_join['num_seats']
+outer_join['Year 8 values'] = outer_join['Year 8'] * outer_join['num_seats']
+outer_join['Year 9 values'] = outer_join['Year 9'] * outer_join['num_seats']
+outer_join['Year 10 values'] = outer_join['Year 10'] * outer_join['num_seats']
 
 # Change end_date to datetime
 outer_join['end_date'] = pd.to_datetime(outer_join['end_date'])
@@ -51,6 +56,42 @@ outer_join['Year 2 dates'] = outer_join['end_date'] + pd.offsets.DateOffset(year
 outer_join['Year 3 dates'] = outer_join['end_date'] + pd.offsets.DateOffset(years=2)
 outer_join['Year 4 dates'] = outer_join['end_date'] + pd.offsets.DateOffset(years=3)
 outer_join['Year 5 dates'] = outer_join['end_date'] + pd.offsets.DateOffset(years=4)
+outer_join['Year 6 dates'] = outer_join['end_date'] + pd.offsets.DateOffset(years=5)
+outer_join['Year 7 dates'] = outer_join['end_date'] + pd.offsets.DateOffset(years=6)
+outer_join['Year 8 dates'] = outer_join['end_date'] + pd.offsets.DateOffset(years=7)
+outer_join['Year 9 dates'] = outer_join['end_date'] + pd.offsets.DateOffset(years=8)
+outer_join['Year 10 dates'] = outer_join['end_date'] + pd.offsets.DateOffset(years=9)
+
+# Create new dataframes to enable concatenate to previous dataframe above deb
+year1=outer_join[['acct_id', 'Year 1 values', 'Year 1 dates']]
+year2=outer_join[['acct_id', 'Year 2 values', 'Year 2 dates']]
+year3=outer_join[['acct_id', 'Year 3 values', 'Year 3 dates']]
+year4=outer_join[['acct_id', 'Year 4 values', 'Year 4 dates']]
+year5=outer_join[['acct_id', 'Year 5 values', 'Year 5 dates']]
+year6=outer_join[['acct_id', 'Year 6 values', 'Year 6 dates']]
+year7=outer_join[['acct_id', 'Year 7 values', 'Year 7 dates']]
+year8=outer_join[['acct_id', 'Year 8 values', 'Year 8 dates']]
+year9=outer_join[['acct_id', 'Year 9 values', 'Year 9 dates']]
+year10=outer_join[['acct_id', 'Year 10 values', 'Year 10 dates']]
+
+# Change column names for concate
+
+year1.rename(columns={'Year 1 values': 'amount', 'Year 1 dates': 'payment date'}, inplace=True)
+year2.rename(columns={'Year 2 values': 'amount', 'Year 2 dates': 'payment date'}, inplace=True)
+year3.rename(columns={'Year 3 values': 'amount', 'Year 3 dates': 'payment date'}, inplace=True)
+year4.rename(columns={'Year 4 values': 'amount', 'Year 4 dates': 'payment date'}, inplace=True)
+year5.rename(columns={'Year 5 values': 'amount', 'Year 5 dates': 'payment date'}, inplace=True)
+year6.rename(columns={'Year 6 values': 'amount', 'Year 6 dates': 'payment date'}, inplace=True)
+year7.rename(columns={'Year 7 values': 'amount', 'Year 7 dates': 'payment date'}, inplace=True)
+year8.rename(columns={'Year 8 values': 'amount', 'Year 8 dates': 'payment date'}, inplace=True)
+year9.rename(columns={'Year 9 values': 'amount', 'Year 9 dates': 'payment date'}, inplace=True)
+year10.rename(columns={'Year 10 values': 'amount', 'Year 10 dates': 'payment date'}, inplace=True)
+
+# Concatenate the df's together
+contracts = pd.concat([year1, year2, year3, year4, year5, year6, year7, year8, year9, year10, deb], ignore_index=True)
+
+# Remove zero values
+contracts= contracts[contracts['amount'] != 0]
 
 
 
