@@ -34,8 +34,7 @@ outer_join.fillna(0)
 # Import Numpy
 import numpy as np
 
-# Convert objects to integer to allow numerical calculations
-outer_join[["num_seats", "Year 1 ", "Year 2", "Year 3", "Year 4", "Year 5"]] = outer_join[["num_seats", "Year 1 ", "Year 2", "Year 3", "Year 4", "Year 5"]].apply(pd.to_numeric)
+# Create values for each year based on number of seats
 outer_join['Year 1 values'] = outer_join['Year 1 '] * outer_join['num_seats']
 outer_join['Year 2 values'] = outer_join['Year 2'] * outer_join['num_seats']
 outer_join['Year 3 values'] = outer_join['Year 3'] * outer_join['num_seats']
@@ -106,9 +105,8 @@ cov1= cov1[cov1['on_account_payments'] != 0]
 contracts.fillna(0, inplace=True)
 contracts['acct_id']= contracts['acct_id'].apply(np.int64)
 
-# Add year & month column's to contracts
+# Add year column to contracts
 contracts['year'] = contracts['payment date'].dt.year
-contracts['month'] = contracts['payment date'].dt.month
 
 # Group by 'acct_id and 'year' and convert series to dataframe
 acyr= contracts.groupby(['acct_id', 'year']).amount.sum()
@@ -204,6 +202,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.patches as mpatches
 
+# Plot dataframe as a stacked bar chart
 sns.set(style='darkgrid')
 plt.figure(figsize=(14,14))
 total = dfforplot.groupby('Years')[0].sum().reset_index()
@@ -214,6 +213,7 @@ top_bar = mpatches.Patch(color='darkblue', label='Covid credit used')
 bottom_bar = mpatches.Patch(color='lightblue', label='Payment')
 plt.legend(handles=[top_bar, bottom_bar])
 plt.show()
+plt.close()
 
 
 
