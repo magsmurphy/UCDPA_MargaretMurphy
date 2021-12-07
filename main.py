@@ -95,11 +95,38 @@ contracts= contracts[contracts['amount'] != 0]
 
 # Change payment date to datetime
 contracts['payment date'] = pd.to_datetime(contracts['payment date'])
-# Sort by payment date
-consorted = contracts.sort_values(by=['payment date'])
-consorted.set_index('payment date', inplace=True)
-To = '2031-12-31'
-From = '2021-10-01'
-consort = consorted.loc[From:To,:]
+
+
+# Read and slice Covid Credits csv
+cov = pd.read_csv('Covid Credit.csv')
+cov1 =cov[['acct_id','on_account_payments']]
+cov1= cov1[cov1['on_account_payments'] != 0]
+
+# Change 'acct_id' type to integer
+contracts.fillna(0, inplace=True)
+contracts['acct_id']= contracts['acct_id'].apply(np.int64)
+
+# Add year & month column's to contracts
+contracts['year'] = contracts['payment date'].dt.year
+contracts['month'] = contracts['payment date'].dt.month
+
+# Group by 'acct_id and 'year' and convert series to dataframe
+acyr= contracts.groupby(['acct_id', 'year']).amount.sum()
+acyrdf = acyr.unstack(level =1, fill_value=0)
+
+# Clean data to show account id only from year 2021 to 2031
+df = acyrdf.iloc[1:, 1:12]
+
+# Merge cov1 with df
+covdf= cov1.set_index('acct_id')
+fulldf = pd.concat([df, covdf], axis=1)
+fulldf = fulldf.fillna(0)
+
+
+
+
+
+
+
 
 
