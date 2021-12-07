@@ -122,11 +122,98 @@ covdf= cov1.set_index('acct_id')
 fulldf = pd.concat([df, covdf], axis=1)
 fulldf = fulldf.fillna(0)
 
+#Create new columns for each year
+conditions = (fulldf[2021]<= fulldf['on_account_payments']) , (fulldf[2021]>fulldf['on_account_payments'])
+choices = [fulldf[2021], fulldf['on_account_payments']]
+fulldf['Covid 2021'] = np.select(conditions, choices)
+fulldf['credit bal 22'] = fulldf['on_account_payments'] - fulldf['Covid 2021']
+fulldf['Payment 2021'] = fulldf[2021] - fulldf['Covid 2021']
 
 
+conditions2 = (fulldf[2022]<= fulldf['credit bal 22']) , (fulldf[2021]>fulldf['credit bal 22'])
+choices2 = [fulldf[2022], fulldf['credit bal 22']]
+fulldf['Covid 2022'] = np.select(conditions2, choices2)
+fulldf['credit bal 23'] = fulldf['credit bal 22'] - fulldf['Covid 2022']
+fulldf['Payment 2022'] = fulldf[2022] - fulldf['Covid 2022']
 
+conditions3 = (fulldf[2023]<= fulldf['credit bal 23']) , (fulldf[2023]>fulldf['credit bal 23'])
+choices3 = [fulldf[2023], fulldf['credit bal 23']]
+fulldf['Covid 2023'] = np.select(conditions3, choices3)
+fulldf['credit bal 24'] = fulldf['credit bal 23'] - fulldf['Covid 2023']
+fulldf['Payment 2023'] = fulldf[2023] - fulldf['Covid 2023']
 
+conditions4 = (fulldf[2024]<= fulldf['credit bal 24']) , (fulldf[2024]>fulldf['credit bal 24'])
+choices4 = [fulldf[2024], fulldf['credit bal 24']]
+fulldf['Covid 2024'] = np.select(conditions4, choices4)
+fulldf['credit bal 25'] = fulldf['credit bal 24'] - fulldf['Covid 2024']
+fulldf['Payment 2024'] = fulldf[2024] - fulldf['Covid 2024']
 
+conditions5 = (fulldf[2025]<= fulldf['credit bal 25']) , (fulldf[2025]>fulldf['credit bal 25'])
+choices5 = [fulldf[2025], fulldf['credit bal 25']]
+fulldf['Covid 2025'] = np.select(conditions5, choices5)
+fulldf['credit bal 26'] = fulldf['credit bal 25'] - fulldf['Covid 2025']
+fulldf['Payment 2025'] = fulldf[2025] - fulldf['Covid 2025']
+
+conditions6 = (fulldf[2026]<= fulldf['credit bal 26']) , (fulldf[2026]>fulldf['credit bal 26'])
+choices6 = [fulldf[2026], fulldf['credit bal 26']]
+fulldf['Covid 2026'] = np.select(conditions6, choices6)
+fulldf['credit bal 27'] = fulldf['credit bal 26'] - fulldf['Covid 2026']
+fulldf['Payment 2026'] = fulldf[2026] - fulldf['Covid 2026']
+
+conditions7 = (fulldf[2027]<= fulldf['credit bal 27']) , (fulldf[2027]>fulldf['credit bal 27'])
+choices7 = [fulldf[2027], fulldf['credit bal 27']]
+fulldf['Covid 2027'] = np.select(conditions7, choices7)
+fulldf['credit bal 28'] = fulldf['credit bal 27'] - fulldf['Covid 2027']
+fulldf['Payment 2027'] = fulldf[2027] - fulldf['Covid 2027']
+
+conditions8 = (fulldf[2028]<= fulldf['credit bal 28']) , (fulldf[2028]>fulldf['credit bal 28'])
+choices8 = [fulldf[2028], fulldf['credit bal 28']]
+fulldf['Covid 2028'] = np.select(conditions8, choices8)
+fulldf['credit bal 29'] = fulldf['credit bal 28'] - fulldf['Covid 2028']
+fulldf['Payment 2028'] = fulldf[2028] - fulldf['Covid 2028']
+
+conditions9 = (fulldf[2029]<= fulldf['credit bal 29']) , (fulldf[2029]>fulldf['credit bal 29'])
+choices9 = [fulldf[2029], fulldf['credit bal 29']]
+fulldf['Covid 2029'] = np.select(conditions9, choices9)
+fulldf['credit bal 30'] = fulldf['credit bal 29'] - fulldf['Covid 2029']
+fulldf['Payment 2029'] = fulldf[2029] - fulldf['Covid 2029']
+
+conditions10 = (fulldf[2030]<= fulldf['credit bal 30']) , (fulldf[2030]>fulldf['credit bal 30'])
+choices10 = [fulldf[2030], fulldf['credit bal 30']]
+fulldf['Covid 2030'] = np.select(conditions10, choices10)
+fulldf['credit bal 31'] = fulldf['credit bal 30'] - fulldf['Covid 2030']
+fulldf['Payment 2030'] = fulldf[2030] - fulldf['Covid 2030']
+
+conditions11 = (fulldf[2031]<= fulldf['credit bal 31']) , (fulldf[2031]>fulldf['credit bal 31'])
+choices11 = [fulldf[2031], fulldf['credit bal 31']]
+fulldf['Covid 2031'] = np.select(conditions11, choices11)
+fulldf['credit bal 32'] = fulldf['credit bal 31'] - fulldf['Covid 2031']
+fulldf['Payment 2031'] = fulldf[2031] - fulldf['Covid 2031']
+
+# Get Total of all columns
+dfsum =fulldf.sum(axis = 0, skipna =True)
+dfmm = dfsum.to_frame().reset_index()
+
+# Add years & category for plotting.
+dfmm['Years'] =[2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2021, 2021, 2022, 2021, 2022, 2023, 2022, 2023, 2024, 2023, 2024, 2025, 2024, 2025, 2026, 2025, 2026, 2027, 2026, 2027, 2028, 2027, 2028, 2029, 2028, 2029, 2030, 2029, 2030, 2031, 2030, 2031, 2032, 2031]
+dfmm['category'] = ['year', 'year', 'year', 'year', 'year', 'year', 'year', 'year', 'year', 'year', 'year', 'covid', 'covid', 'covid', 'payment','covid', 'covid', 'payment','covid', 'covid','payment','covid', 'covid','payment','covid', 'covid', 'payment','covid', 'covid', 'payment','covid', 'covid', 'payment','covid','covid', 'payment','covid','covid', 'payment','covid','covid', 'payment','covid', 'covid', 'payment']
+dfforplot = dfmm.iloc[[12, 14, 15, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30, 32, 33, 35, 36, 38, 39, 41, 42 , 44 ]]
+
+# Import matplotlib and seaborn
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib.patches as mpatches
+
+sns.set(style='darkgrid')
+plt.figure(figsize=(14,14))
+total = dfforplot.groupby('Years')[0].sum().reset_index()
+bar1 = sns.barplot(x='Years', y=0, data=total, color='darkblue').set(title= 'Cashflow Forecast Premium Seats 2021 to 2031', ylabel='10s of Millions')
+payment = dfforplot[dfforplot.category=='payment']
+bar2 = sns.barplot(x ='Years', y=0, data=payment, estimator=sum, ci=None, color='lightblue').set(title= 'Cashflow Forecast Premium Seats 2021 to 2031', ylabel='10s of Millions')
+top_bar = mpatches.Patch(color='darkblue', label='Covid credit used')
+bottom_bar = mpatches.Patch(color='lightblue', label='Payment')
+plt.legend(handles=[top_bar, bottom_bar])
+plt.show()
 
 
 
